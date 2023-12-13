@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// EXTENSIONES 
+//prisma 
+// sqllite Viewer (click derecho en la bdd dev.db -> abrir con sqlviewer)
+// Pasos 
+// 1. instalar prisma  npm i prisma -D
+// 2. npx prisma init --datasource-provider sqlite
+// 3. generamos el modelo de datos 
+// 4. npx prisma migrate dev --name post-user-relation para generar las tablas 
+// -Se añadieron dos paquetes adicionales prisma client,
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  email String @unique
+  name String 
+  lastname String?
+  posts Post[] 
+}
+
+model Post {
+  id Int @id @default(autoincrement())
+  title String
+  content String?
+  authorId Int
+  author User @relation(fields: [authorId], references: [id])
+
+}
